@@ -29,22 +29,22 @@ credentials_for_provider:
       pt_BR: Please visit the Mem0 AI Dashboard to register an account and apply for an API key
     url: https://app.mem0.ai/dashboard/api-keys
   mem0_base_url:
-      type: text-input
-      required: true
-      default: https://api.mem0.ai/v1
-      label:
-        en_US: Mem0 Base URL
-        zh_Hans: Mem0 基础 URL
-        pt_BR: Mem0 Base URL
-      placeholder:
-        en_US: 'Please input your Mem0 Base URL (default: https://api.mem0.ai/v1)'
-        zh_Hans: '请输入你的 Mem0 基础 URL (默认: https://api.mem0.ai/v1)'
-        pt_BR: 'Please input your Mem0 Base URL (padrão: https://api.mem0.ai/v1)'
-      help:
-        en_US: This field is used to set the Base URL for the Mem0 server. The default is https://api.mem0.ai/v1.
-        zh_Hans: 此字段用于设置 Mem0 服务器的基础 URL，默认值为 https://api.mem0.ai/v1.
-        pt_BR: Este campo define a URL base do servidor Mem0. O padrão é https://api.mem0.ai/v1.
-      url: https://app.mem0.ai/dashboard/api-keys
+    type: text-input
+    required: false
+    default: https://api.mem0.ai/v1
+    label:
+      en_US: Mem0 Base URL
+      zh_Hans: Mem0 基础 URL
+      pt_BR: Mem0 Base URL
+    placeholder:
+      en_US: 'Please input your Mem0 Base URL (default: https://api.mem0.ai/v1)'
+      zh_Hans: '请输入你的 Mem0 基础 URL (默认: https://api.mem0.ai/v1)'
+      pt_BR: 'Please input your Mem0 Base URL (padrão: https://api.mem0.ai/v1)'
+    help:
+      en_US: This field is used to set the Base URL for the Mem0 server. The default is https://api.mem0.ai/v1.
+      zh_Hans: 此字段用于设置 Mem0 服务器的基础 URL，默认值为 https://api.mem0.ai/v1.
+      pt_BR: Este campo define a URL base do servidor Mem0. O padrão é https://api.mem0.ai/v1.
+    url: https://app.mem0.ai/dashboard/api-keys
 
 tools:
   - tools/add_memory.yaml
@@ -52,5 +52,3 @@ tools:
 extra:
   python:
     source: provider/mem0.py
-
-

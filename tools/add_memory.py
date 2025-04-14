@@ -9,9 +9,9 @@ class Mem0Tool(Tool):
     def _invoke(self, tool_parameters: dict[str, Any]) -> Generator[ToolInvokeMessage, None, None]:
         # Get API key from credentials
         api_key = self.runtime.credentials["mem0_api_key"]
-        base_url = self.runtime.credentials["mem0_base_url"]
+        base_url = self.runtime.credentials["mem0_base_url"] or "https://api.mem0.ai/v1"
         is_local = "api.mem0.ai" not in base_url
-
+        
         # Format messages
         messages = [
             {"role": "user", "content": tool_parameters["user"]},
@@ -27,7 +27,7 @@ class Mem0Tool(Tool):
         # Make direct HTTP request to mem0 API
         try:
             response = httpx.post(
-                f"{base_url}/memories",
+                f"{base_url}/memories/",
                 json=payload,
                 headers={"Authorization": f"Token {api_key}"},
                 timeout=30
