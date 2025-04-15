@@ -11,13 +11,13 @@ class RetrieveMem0Tool(Tool):
         api_key = self.runtime.credentials["mem0_api_key"]
         base_url = self.runtime.credentials["mem0_base_url"] or "https://api.mem0.ai/v1"
         is_local = "api.mem0.ai" not in base_url
-        
+
         # Prepare payload for search
         payload = {
             "query": tool_parameters["query"],
             "user_id": tool_parameters["user_id"]
         }
-        
+
         # Make direct HTTP request to mem0 API
         try:
             response = httpx.post(
@@ -27,8 +27,12 @@ class RetrieveMem0Tool(Tool):
                 timeout=30
             )
             response.raise_for_status()
-            results = response.json()
-            
+            response = response.json()
+
+            # Compatible with the return data type in the Mem0 self-hosted,
+            # here: https://github.com/mem0ai/mem0/blob/main/server/main.py#L158
+            results = response["results"] if "results" in response else response
+
             # Return JSON format
             yield self.create_json_message({
                 "query": tool_parameters["query"],
@@ -40,7 +44,7 @@ class RetrieveMem0Tool(Tool):
                     "created_at": r["created_at"]
                 } for r in results]
             })
-            
+
             # Return text format
             text_response = f"Query: {tool_parameters['query']}\n\nResults:\n"
             if results:
@@ -50,9 +54,9 @@ class RetrieveMem0Tool(Tool):
                     text_response += f"\n   Categories: {', '.join(r.get('categories', []))}"
             else:
                 text_response += "\nNo results found."
-                
+
             yield self.create_text_message(text_response)
-            
+
         except httpx.HTTPStatusError as e:
             error_message = f"HTTP error: {e.response.status_code}"
             try:
@@ -61,20 +65,20 @@ class RetrieveMem0Tool(Tool):
                     error_message = f"Error: {error_data['detail']}"
             except:
                 pass
-            
+
             yield self.create_json_message({
                 "status": "error",
                 "error": error_message
             })
-            
+
             yield self.create_text_message(f"Failed to retrieve memory: {error_message}")
-            
+
         except Exception as e:
             error_message = f"Error: {str(e)}"
-            
+
             yield self.create_json_message({
                 "status": "error",
                 "error": error_message
             })
-            
+
             yield self.create_text_message(f"Failed to retrieve memory: {error_message}")
