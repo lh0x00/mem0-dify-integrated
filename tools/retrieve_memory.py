@@ -1,6 +1,5 @@
 from collections.abc import Generator
-from typing import Any, Dict, List
-import json
+from typing import Any
 import httpx
 from dify_plugin import Tool
 from dify_plugin.entities.tool import ToolInvokeMessage
@@ -21,10 +20,11 @@ class RetrieveMem0Tool(Tool):
         # Make direct HTTP request to mem0 API
         try:
             response = httpx.post(
-                f"{base_url}/search" if is_local else f"{base_url}/memories/search/",
+                f"{base_url}/search/" if is_local else f"{base_url}/memories/search/",
                 json=payload,
                 headers={"Authorization": f"Token {api_key}"},
-                timeout=30
+                timeout=30,
+                follow_redirects=True,
             )
             response.raise_for_status()
             response = response.json()
